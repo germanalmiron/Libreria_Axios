@@ -1,45 +1,38 @@
-//Declaro las variables.
+//Consumo de libreria Externa mediante la libreria Axios.
+
 (() => {
-    const $fetch = document.getElementById("fetchUsuarios"),
-    $fragmento = document.createDocumentFragment();
 
-//Implemento FETCH con .then
+    //Declaro las variables.
 
-fetch("http://jsonplaceholder.typicode.com/users")
+    const $requestAxios=document.getElementById("requestAxios"),
+    $fragmento=document.createDocumentFragment();
 
-    .then((res) => {
-        
-        //console.log(res)
+    //Implemento Axios. Objeto Axios
 
-        return res.ok?res.json():Promise.reject(res);
+    axios.get("http://jsonplaceholder.typicode.com/users")
 
-    })
+    //Implemento Axios con .then . catch . finally
 
-    .then((data) => {
-
-        //console.log(data)
-        
-        data.forEach(element => {
+    .then ((res)=>{
+    console.log(res);
+        let jsondata = res.data;
+        jsondata.forEach(element =>{
             const $li=document.createElement("li");
-            $li.innerHTML=`${element.name}--${element.email}--${element.phone}--${element.username} <br><br>`
-            $fragmento.appendChild($li) 
-            
+            $li.innerHTML=`${element.name}--${element.email}--${element.phone}--${element.website}<br><br>`
+            $fragmento.appendChild($li);
+            //console.log($fragmento)
         });
+
         //Realiza una inserción en el DOM
-        $fetch.appendChild($fragmento);
+        $requestAxios.appendChild($fragmento)
 
     })
-
-    //Error 404
-    .catch(err => {
-        console.log("Manipulando el error",err);
-        //persozonalizo el error
-        let mensaje = err.statusText || "Ocurrido un Error";
-        $fetch.innerHTML=`ERROR ${err.status}:${mensaje}`
+    .catch((err)=>{
+        //console.log ("Gestionando el Error, err")
+        let mensaje = err.statusText || "Ocurrio un error";
+        $fetchAsync.innerHTML=`ERROR ${err.status}:${mensaje}`;
     })
-
-    .finally(()=>
-        console.log("Esta línea se imprime")
-    )
+    .finally()
+        console.log("Este código se ejecuta de igual manera, independientente del try..catch");
 
 })();
